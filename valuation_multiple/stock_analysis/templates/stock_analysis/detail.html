@@ -1,0 +1,214 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+<div class="m-5">
+  <h1>{{ fundamental_analysis.name }}</h1>
+  {% if errors %}
+  <div class="alert alert-danger" role="alert">
+    <ul class="mt-3">
+      {% for error in errors %}
+      <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  {% if not fundamental_analysis.stock_set.all %}
+  <p>El análisis fundamental no tiene acciones para analizar</p>
+  {% else %}
+  <table class="table mb-5">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Ratio</th>
+        {% for stock in fundamental_analysis.stock_set.all %}
+        <th scope="col">
+          <a href="{% url 'stock_analysis:stock_detail' stock.id %}">{{ stock }}</a>
+          <a href="{% url 'stock_analysis:delete_stock_from_fundamental_analysis' fundamental_analysis.id stock.id %}">🗑️</a>
+        </th>
+        {% endfor %}
+        <th scope="col">Promedio</th>
+        <th scope="col">Valor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Price</td>
+        {% for stock in fundamental_analysis.stock_set.all %}
+        <td>${{ stock.price|floatformat:2 }} USD</td>
+        {% endfor %}
+        <td>${{ fundamental_analysis.avg_price|floatformat:2 }} USD</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Current Ratio</td>
+        {% for stock in fundamental_analysis.stock_set.all %}
+        <td>{{ stock.current_ratio|floatformat:2 }}</td>
+        {% endfor %}
+        <td>{{ fundamental_analysis.avg_current_ratio|floatformat:2 }}</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Quick Ratio</td>
+        {% for stock in fundamental_analysis.stock_set.all %}
+        <td>{{ stock.quick_ratio|floatformat:2 }}</td>
+        {% endfor %}
+        <td>{{ fundamental_analysis.avg_quick_ratio|floatformat:2 }}</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Cash Ratio</td>
+        {% for stock in fundamental_analysis.stock_set.all %}
+        <td>{{ stock.cash_ratio|floatformat:2 }}</td>
+        {% endfor %}
+        <td>{{ fundamental_analysis.avg_cash_ratio|floatformat:2 }}</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Debt/Equity</td>
+        {% for stock in fundamental_analysis.stock_set.all %}
+        <td>{{ stock.debt_equity|floatformat:2 }}</td>
+        {% endfor %}
+        <td>{{ fundamental_analysis.avg_debt_equity|floatformat:2 }}</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Inventory Turnover</td>
+        {% for stock in fundamental_analysis.stock_set.all %}
+        <td>{{ stock.inventory_turnover|floatformat:2 }}</td>
+        {% endfor %}
+        <td>{{ fundamental_analysis.avg_inventory_turnover|floatformat:2 }}</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Days Inventory</td>
+        {% for stock in fundamental_analysis.stock_set.all %}
+        <td>{{ stock.days_inventory|floatformat:2 }}</td>
+        {% endfor %}
+        <td>{{ fundamental_analysis.avg_days_inventory|floatformat:2 }}</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Assets Turnover</td>
+        {% for stock in fundamental_analysis.stock_set.all %}
+        <td>{{ stock.assets_turnover|floatformat:2 }}</td>
+        {% endfor %}
+        <td>{{ fundamental_analysis.avg_assets_turnover|floatformat:2 }}</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Return On Equity</td>
+        {% for stock in fundamental_analysis.stock_set.all %}
+        <td>{{ stock.return_on_equity|floatformat:2 }}</td>
+        {% endfor %}
+        <td>{{ fundamental_analysis.avg_return_on_equity|floatformat:2 }}</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Net Margin</td>
+        {% for stock in fundamental_analysis.stock_set.all %}
+        <td>{{ stock.net_margin|floatformat:2 }}</td>
+        {% endfor %}
+        <td>{{ fundamental_analysis.avg_net_margin|floatformat:2 }}</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Price Earnings</td>
+        {% for stock in fundamental_analysis.stock_set.all %}
+        <td>{{ stock.price_earnings|floatformat:2 }}</td>
+        {% endfor %}
+        <td>{{ fundamental_analysis.avg_price_earnings|floatformat:2 }}</td>
+        <td>{{ fundamental_analysis.best_stock_price_earnings|floatformat:2 }}</td>
+      </tr>
+      <tr>
+        <td>Price Cash Flow</td>
+        {% for stock in fundamental_analysis.stock_set.all %}
+        <td>{{ stock.price_cash_flow|floatformat:2 }}</td>
+        {% endfor %}
+        <td>{{ fundamental_analysis.avg_price_cash_flow|floatformat:2 }}</td>
+        <td>{{ fundamental_analysis.best_stock_price_cash_flow|floatformat:2 }}</td>
+      </tr>
+      <tr>
+        <td>Price to Sales</td>
+        {% for stock in fundamental_analysis.stock_set.all %}
+        <td>{{ stock.price_to_sales|floatformat:2 }}</td>
+        {% endfor %}
+        <td>{{ fundamental_analysis.avg_price_to_sales|floatformat:2 }}</td>
+        <td>{{ fundamental_analysis.best_stock_price_to_sales|floatformat:2 }}</td>
+      </tr>
+      <tr>
+        <td>Price to Book</td>
+        {% for stock in fundamental_analysis.stock_set.all %}
+        <td>{{ stock.price_to_book|floatformat:2 }}</td>
+        {% endfor %}
+        <td>{{ fundamental_analysis.avg_price_to_book|floatformat:2 }}</td>
+        <td>{{ fundamental_analysis.best_stock_price_to_book|floatformat:2 }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table mb-5">
+    <thead class="thead-dark">
+      <tr>
+        <th>Ratios</th>
+        <th>{{ stock }}</th>
+        <th>5 Años</th>
+        <th>Precio</th>
+        <th>Valor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Price Earnings</td>
+        <td>{{ stock.price_earnings|floatformat:2 }}</td>
+        <td>{{ stock.price_earnings_five_years|floatformat:2 }}</td>
+        <td>{{ stock.price|floatformat:2 }}</td>
+        <td>{{ stock.real_price_earnings|floatformat:2 }}</td>
+      </tr>
+      <tr>
+        <td>Price to Sales</td>
+        <td>{{ stock.price_to_sales|floatformat:2 }}</td>
+        <td>{{ stock.price_to_sales_five_years|floatformat:2 }}</td>
+        <td>{{ stock.price|floatformat:2 }}</td>
+        <td>{{ stock.real_price_to_sales|floatformat:2 }}</td>
+      </tr>
+      <tr>
+        <td>Price to Book</td>
+        <td>{{ stock.price_to_book|floatformat:2 }}</td>
+        <td>{{ stock.price_to_book_five_years|floatformat:2 }}</td>
+        <td>{{ stock.price|floatformat:2 }}</td>
+        <td>{{ stock.real_price_to_book|floatformat:2 }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table mb-5">
+    <thead class="thead-dark">
+      <tr>
+        <th>Historico</th>
+        <th>Intrinseco por Industria</th>
+        <th>Valor final</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ fundamental_analysis.historical|floatformat:2 }}</td>
+        <td>{{ fundamental_analysis.intrinsic_by_industry|floatformat:2 }}</td>
+        <td>{{ fundamental_analysis.final_value|floatformat:2 }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  {% endif %}
+
+  <form action="{% url 'stock_analysis:add_stock' fundamental_analysis.id %}" method="post">
+    {% csrf_token %}
+    <fieldset>
+      <div class="form-group">
+        <label for="name">Añadir tickers (escribir nombres de tickers separados por espacios)</label>
+        <input type="text" class="form-control" name="tickers" id="tickers", value="{{ tickers }}">
+      </div>
+      <button type="submit" class="btn btn-success">Añadir ticker</button>
+    </fieldset>
+  </form>
+</div>
+{% endblock %}

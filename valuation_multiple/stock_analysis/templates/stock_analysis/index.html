@@ -1,0 +1,27 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+<div class="m-5">
+  <header class="d-flex justify-content-between">
+    <h1>My fundamental analysis</h1>
+    <a href="{% url 'stock_analysis:new' %}">
+      <button type="button" class="btn btn-primary ml-5 mt-1">New fundamental analysis</button>
+    </a>
+  </header>
+  <main>
+    {% if fundamental_analysis_list %}
+      <ul>
+      {% for fundamental_analysis in fundamental_analysis_list %}
+        <li>
+          <a href="{% url 'stock_analysis:detail' fundamental_analysis.id %}">
+            {{ fundamental_analysis.name }}
+          </a>
+        </li>
+      {% endfor %}
+      </ul>
+    {% else %}
+      <p>No fundamental analysis available</p>
+    {% endif %}
+  </main>
+</div>
+{% endblock %}
