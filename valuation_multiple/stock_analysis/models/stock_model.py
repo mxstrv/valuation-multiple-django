@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 from .fundamental_analysis_model import FundamentalAnalysis
 from stock_analysis.classes.stock_valuation import StockValuation
@@ -8,6 +10,10 @@ import json
 import certifi
 import yfinance as yf
 from statistics import mean
+from dotenv import load_dotenv
+
+load_dotenv()
+API_KEY = os.environ.get('API_KEY')
 
 
 class Stock(models.Model):
@@ -130,7 +136,7 @@ class Stock(models.Model):
         self.price_to_book_five_years = mean(price_to_book_five_years)
 
     def __financialmodelingprep_update_stock_ratios(self) -> bool:
-        url = f"https://financialmodelingprep.com/api/v3/ratios/{self.ticker}?apikey=58f91c97ad7ca8846322ee09d634a66c"
+        url = f"https://financialmodelingprep.com/api/v3/ratios/{self.ticker}?apikey={API_KEY}"
         response = urlopen(url, cafile=certifi.where())
         data = response.read().decode("utf-8")
         ratios = json.loads(data)
