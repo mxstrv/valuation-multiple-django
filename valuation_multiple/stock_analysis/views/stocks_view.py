@@ -35,7 +35,7 @@ def stock_detail(request: WSGIRequest, stock_id: int) -> HttpResponse:
     stock = get_object_or_404(Stock, pk=stock_id)
     return render(
         request,
-        "stock_report/stocks/detail.html",
+        "stock_analysis/stocks/detail.html",
         {"stock": stock},
     )
 
@@ -43,7 +43,7 @@ def stock_detail(request: WSGIRequest, stock_id: int) -> HttpResponse:
 def new_stock(request: WSGIRequest) -> HttpResponse:
     stock = Stock()
     return render(
-        request, "stock_report/stocks/new.html", {"stock": stock, "errors": ""}
+        request, "stock_analysis/stocks/new.html", {"stock": stock, "errors": ""}
     )
 
 
@@ -54,7 +54,7 @@ def create_stock(request: WSGIRequest) -> HttpResponseRedirect:
     if errors:
         return render(
             request,
-            "stock_report/stocks/new.html",
+            "stock_analysis/stocks/new.html",
             {"stock": stock, "errors": errors},
         )
 
@@ -70,7 +70,7 @@ def add_stock(
         FundamentalAnalysis, pk=fundamental_analysis_id
     )
 
-    tickers = request.POST["tickers"]
+    tickers = request.POST.get("tickers", "")
     stocks = get_stocks(tickers.upper())
     errors = get_stock_errors(fundamental_analysis, stocks)
 
