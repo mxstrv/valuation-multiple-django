@@ -11,7 +11,6 @@ from stock_analysis.models.fundamental_analysis_model import FundamentalAnalysis
 from stock_analysis.views.stocks_view import get_stocks
 from typing import List
 
-
 class IndexView(generic.ListView):
     template_name = "stock_analysis/index.html"
     context_object_name = "fundamental_analysis_list"
@@ -29,7 +28,7 @@ def detail(request: WSGIRequest, fundamental_analysis_id: int) -> HttpResponse:
 
     return render(
         request,
-        "stock_report/detail.html",
+        "stock_analysis/detail.html",
         {"fundamental_analysis": fundamental_analysis, "stock": stock},
     )
 
@@ -38,7 +37,7 @@ def new_fundamental_analysis(request: WSGIRequest) -> HttpResponse:
     fundamental_analysis = FundamentalAnalysis()
     return render(
         request,
-        "stock_report/new.html",
+        "stock_analysis/new.html",
         {
             "fundamental_analysis": fundamental_analysis,
             "tickers": "",
@@ -51,10 +50,10 @@ def create_fundamental_analysis(
     request: WSGIRequest,
 ) -> HttpResponseRedirect:
     fundamental_analysis = FundamentalAnalysis()
-    fundamental_analysis.name = request.POST["name"]
-    fundamental_analysis.industry = request.POST["industry"]
-    first_ticker_analysis = True if "first_ticker_analysis" in request.POST else False
-    tickers = request.POST["tickers"]
+    fundamental_analysis.name = request.POST.get("name", "")
+    fundamental_analysis.industry = request.POST.get("industry", "")
+    first_ticker_analysis = request.POST.get("first_ticker_analysis") == "on"
+    tickers = request.POST.get("tickers", "")
 
     stocks = get_stocks(tickers.upper())
     errors = get_fundamental_analysis_errors(fundamental_analysis, stocks)
@@ -62,7 +61,7 @@ def create_fundamental_analysis(
     if errors:
         return render(
             request,
-            "stock_report/new.html",
+            "stock_analysis/new.html",
             {
                 "fundamental_analysis": fundamental_analysis,
                 "tickers": tickers,
@@ -84,7 +83,7 @@ def create_fundamental_analysis(
         fundamental_analysis.calculate_best_stock()
 
     return HttpResponseRedirect(
-        reverse("stock_reports:detail", args=(fundamental_analysis.id,))
+        reverse("stock_analysis:detail", args=(fundamental_analysis.id,))
     )
 
 
@@ -101,5 +100,5 @@ def delete_stock_from_fundamental_analysis(
     fundamental_analysis.calculate_best_stock()
 
     return HttpResponseRedirect(
-        reverse("stock_reports:detail", args=(fundamental_analysis_id,))
+        reverse("stock_analysis:detail", args=(fundamental_analysis_id,))
     )
