@@ -14,7 +14,7 @@
   {% endif %}
 
   {% if not fundamental_analysis.stock_set.all %}
-  <p>El análisis fundamental no tiene acciones para analizar</p>
+  <p>Fundamental analysis has no stocks to analyze</p>
   {% else %}
   <table class="table mb-5">
     <thead class="thead-dark">
@@ -26,8 +26,8 @@
           <a href="{% url 'stock_analysis:delete_stock_from_fundamental_analysis' fundamental_analysis.id stock.id %}">🗑️</a>
         </th>
         {% endfor %}
-        <th scope="col">Promedio</th>
-        <th scope="col">Valor</th>
+        <th scope="col">Average</th>
+        <th scope="col">Value</th>
       </tr>
     </thead>
     <tbody>
@@ -184,9 +184,9 @@
   <table class="table mb-5">
     <thead class="thead-dark">
       <tr>
-        <th>Historico</th>
-        <th>Intrinseco por Industria</th>
-        <th>Valor final</th>
+        <th>History</th>
+        <th>Intrinsic by Industry</th>
+        <th>Final vaue</th>
       </tr>
     </thead>
     <tbody>
@@ -204,10 +204,10 @@
     {% csrf_token %}
     <fieldset>
       <div class="form-group">
-        <label for="name">Añadir tickers (escribir nombres de tickers separados por espacios)</label>
-        <input type="text" class="form-control" name="tickers" id="tickers", value="{{ tickers }}">
+        <label for="name">Add tickers (write ticker names separated by spaces)</label>
+        <input type="text" class="form-control" name="tickers" id="tickers" value="{{ tickers }}">
       </div>
-      <button type="submit" class="btn btn-success">Añadir ticker</button>
+      <button type="submit" class="btn btn-success">Add ticker</button>
     </fieldset>
   </form>
 </div>
