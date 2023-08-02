@@ -33,7 +33,7 @@ The Valuation Multiple Web App allows users to calculate multiples of stocks for
 
 `pip install -r requirements.txt`
 
-3. Get API key
+3. Get API key from [financialmodelingprep.com](https://financialmodelingprep.com)
 ### Usage
 
 1. Start the web app server:
